@@ -13,17 +13,20 @@
 
 %% Equation of Motion
 % Definition of the variables and constants
-  m1 = 100;   % kg
-  m2 = 15;    % kg 
-  c2 = 30;    % Ns/m
-  k1 = 15;    % kN/m
-  k2 = 2;     % kN/m
+m1 = 100;   % Kg
+m2 = 15;    % 
+q1 = 1;
+q2 = 2; 
+c2 = 30;
+k1 = 15;
+k2 = 2;
+u = 1;
 
 % Equation
 % Mass Matrix
   M = [ m1, 0;...
         0, m2];
-   
+  
 % Stiffness spring Matrix
   K = [ k1+k2, -k2;...
        -k2,   k2];
