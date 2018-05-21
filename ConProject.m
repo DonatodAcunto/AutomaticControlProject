@@ -20,7 +20,7 @@
   k2 = 2;     % kN/m
   omega1 = sqrt(k1/m1);
   omega2 = sqrt(k2/m2);
-  syms t;
+  t = 0:1:1000;
 % Equation
 % Mass Matrix
   M = [ m1, 0;...
@@ -35,24 +35,33 @@
        -c2,  c2];
   
 % Motion of the system Matrix
-  Q   = [ q1(t);...
-          q2(t)];
-  dQ  = [ diff(q1,t);...
-          diff(q2,t)];
-  dQ2 = [ diff(diff(q1,t));...
-          diff(diff(q2,t))];
+ % Q   = [ q1(t);...
+  %        q2(t)];
+ % dQ  = [ diff(q1,t);...
+  %        diff(q2,t)];
+ % dQ2 = [ diff(diff(q1,t));...
+  %        diff(diff(q2,t))];
       
 % Input Matrix
-  U = [ u;...
-        0];
+ % U = [ u;...
+  %      0];
     
 % Final Equation of Motion    
-  U(q1, q2) = M*dQ2 + C*dQ + K*Q;
+ % U(q1, q2) = M*dQ2 + C*dQ + K*Q;
   
    
 %% State Space Representation
-
-sys = ss(A, B, C, 0);
+% d^2q1/dt + omega1^2*q1 = 1/m1*u
+% d^2q2/dt = 0
+% What are A, B, C
+% R^(4*4)----> A
+A = [       0,      1, 0, 0;...
+     -(m1^(-1)*k1), 0, 0, 0;...
+            0,      0, 0, 1;...
+            0,      0, 0, 0];
+% R^(1*4)----> B
+B = [m1^(-1); 0; 0; 0];
+%sys = ss(A, B, C, 0);
 
    
    
