@@ -116,14 +116,17 @@ eig(A'*P+P*A)
 
 % compute the size of the matrices
 n = length(A);
+F=zeros(size(B));
 [ny,nu] = size(F);
 % decision variables
 P=sdpvar(n); % symmetric n-x-n
 gamma=sdpvar(1); % scalar
 % define the inequality constraints
-M = [ P*A P*E zeros(n,ny);
-     zeros(nu,n) -gamma/2*eye(nu) zeros(nu,ny);
+M = [ P*A P*B zeros(n,ny);
+     zeros(nu,n) -gamma/2*eye(nu) F;
         C F -gamma/2*eye(ny)];
+    
+%He function
 constr = set(M+M'<0) + set(P>0); %This command does not work in Matlab R2017b;
 %constr = [M+M’<0,P>0]
 opts=sdpsettings;
@@ -134,6 +137,6 @@ yalmipdiagnostics = solvesdp(constr,gamma,opts)
 Psol=double(P);
 gammasol=double(gamma);
 % compare to alternative Hinf norm computation
-sys = pck(A,E,C,F);
+sys = pck(A,B,C,F);
 out = hinfnorm(sys);
 disp([out(2) gammasol])
