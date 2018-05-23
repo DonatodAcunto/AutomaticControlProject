@@ -144,3 +144,5 @@ disp([out(2) gammasol])
 %% Bode Diagram
 %G(s) = C(sI-A)^(-1)*B
 G = @(s)(C(s*eye(size(A))-A)^(-1)*B);
+%%[zeros, poles]= ss2tf(A,B,C,0)
+%sys = tf(Numerator,Denominator) 
