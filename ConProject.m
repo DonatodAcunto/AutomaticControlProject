@@ -1,3 +1,6 @@
+clc;
+clear all;
+close all;
 %% Automatic Control Project 2018
 % Exercise 1 - The Vibration Absorber
 
@@ -144,5 +147,5 @@ disp([out(2) gammasol])
 %G(s) = C(sI-A)^(-1)*B
 G = @(s)(C(s*eye(size(A))-A)^(-1)*B);
 [zeros, poles]= ss2tf(A,B,C,0)
-%sys = tf(Numerator,Denominator) 
+TR = tf(zeros,poles)
 
