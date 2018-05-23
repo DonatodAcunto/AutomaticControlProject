@@ -116,19 +116,20 @@ eig(A'*P+P*A)
 
 % compute the size of the matrices
 n = length(A);
-F=zeros(size(B));
+F=zeros(1,1);
 [ny,nu] = size(F);
 % decision variables
 P=sdpvar(n); % symmetric n-x-n
 gamma=sdpvar(1); % scalar
 % define the inequality constraints
+
 M = [ P*A P*B zeros(n,ny);
-     zeros(nu,n) -gamma/2*eye(nu) F;
+     zeros(nu,n) -gamma/2*eye(nu) 0;
         C F -gamma/2*eye(ny)];
     
 %He function
-constr = set(M+M'<0) + set(P>0); %This command does not work in Matlab R2017b;
-%constr = [M+M’<0,P>0]
+%constr = set(M+M'<0) + set(P>0); %This command does not work in Matlab R2017b;
+constr = [M+M'<0,P>0]
 opts=sdpsettings;
 opts.solver='sdpt3';
 % solve the LMI minimizing gamma
@@ -140,12 +141,11 @@ gammasol=double(gamma);
 sys = pck(A,B,C,F);
 out = hinfnorm(sys);
 disp([out(2) gammasol])
-<<<<<<< HEAD
+
 
 %% Bode Diagram
 %G(s) = C(sI-A)^(-1)*B
-G = @(s)(C(s*eye(size(A))-A)^(-1)*B);
-%%[zeros, poles]= ss2tf(A,B,C,0)
-%sys = tf(Numerator,Denominator) 
-=======
->>>>>>> parent of 0011de5... 3 su 4
+%G = @(s)(C(s*eye(size(A))-A)^(-1)*B);
+[zeros, poles]= ss2tf(A,B,C,0)
+G = tf(zeros,poles) 
+
