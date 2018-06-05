@@ -149,3 +149,5 @@ G = @(s)(C(s*eye(size(A))-A)^(-1)*B);
 [zeros, poles]= ss2tf(A,B,C,0)
 TR = tf(zeros,poles)
 
+%% Il gamma è uguale al picco del bode diagram
+
