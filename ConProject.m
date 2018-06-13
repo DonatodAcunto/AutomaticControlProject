@@ -1,6 +1,9 @@
 clc;
 clear all;
 close all;
+
+addpath '../sdpt3-master'
+savepath
 %% Automatic Control Project 2018
 % Exercise 1 - The Vibration Absorber
 
@@ -54,17 +57,21 @@ close all;
   
    
 %% State Space Representation
-% d^2q1/dt + omega1^2*q1 = 1/m1*u
-% d^2q2/dt = 0
+
 % What are A, B, C
+
 % R^(4*4)----> A
 A = [       0,          1,      0,      0;...
       -(k1+k2)/m1,  -c2/m1,   k2/m1, +c2/m1;...
             0,         0,       0,      1;...
           k2/m2,     c2/m2,  -k2/m2, -c2/m2];
+
 % R^(1*4)----> B
 B = [m1^(-1); 0; 0; 0];
+
+% R^(1*4)----> C
 C = [1, 0, 0, 0];
+
 %Q1 = [q1, q2, q1', q2'];
 %sys = ss(A, B, C, 0);
 
@@ -73,7 +80,6 @@ C = [1, 0, 0, 0];
 % check that the eigenvalues of matrix A have strictly negative real part.
 % we conclude that the system is Globally Exponentially Stable (GES) 
 eig(A)
-
 
 
 %% Lyapunot stability as an LMI problem 
@@ -112,8 +118,7 @@ disp(msg);
 P = double(P);
 
 % check that is a proper Lyapunov function 
-
-eig(A'*P+P*A)
+eig(A'*P+P*A);
 
 %% LMI Formulation
 
@@ -125,9 +130,15 @@ F=zeros(1,1);
 P=sdpvar(n); % symmetric n-x-n
 gamma=sdpvar(1); % scalar
 % define the inequality constraints
-M = [ P*A P*B zeros(n,ny);
+M1 = [ P*A P*B zeros(n,ny);
      zeros(nu,n) -gamma/2*eye(nu) 0;
         C F -gamma/2*eye(ny)];
+    
+% define the inequality constraints 
+%(Secondo me questa è quella giusta le transfer function sono identiche)
+M = [ (A'*P+P*A) P*B C';
+    B'*P -gamma*eye(nu) 0;
+        C 0 -gamma*eye(ny)];
     
 %He function
 %constr = set(M+M'<0) + set(P>0); %This command does not work in Matlab R2017b;
