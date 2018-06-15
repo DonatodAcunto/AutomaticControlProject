@@ -158,15 +158,12 @@ disp([out(2) gammasol])
 %G(s) = C(sI-A)^(-1)*B
 G = @(s)(C(s*eye(size(A))-A)^(-1)*B);
 [zeros, poles] = ss2tf(A,B,C,0)
-
 TR = tf(zeros,poles)
-[mag, phase, wout] = bode(TR);
-maxPlot = max(mag)
 opts = bodeoptions('pref');
 opts.MagUnit='abs';
 figure;
 %bode(sys);
 h = bodeplot(TR,opts);
-
+max
 %% Il gamma è uguale al picco del bode diagram
 
